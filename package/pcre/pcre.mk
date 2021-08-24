@@ -5,7 +5,7 @@
 ################################################################################
 
 PCRE_VERSION = 8.36
-PCRE_SITE = ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre
+PCRE_SITE = ftp://ftp.pcre.org/pub/pcre/
 PCRE_LICENSE = BSD-3c
 PCRE_LICENSE_FILES = LICENCE
 PCRE_INSTALL_STAGING = YES
