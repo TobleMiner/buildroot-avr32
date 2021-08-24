@@ -90,10 +90,14 @@ HOST_GCC_COMMON_CONF_OPTS = \
 	--with-sysroot=$(STAGING_DIR) \
 	--disable-__cxa_atexit \
 	--with-gnu-ld \
-	--disable-libssp \
 	--disable-multilib \
 	--with-gmp=$(HOST_DIR)/usr \
 	--with-mpfr=$(HOST_DIR)/usr
+
+# Stack protection needs libssp
+ifneq ($(BR2_TOOLCHAIN_BUILDROOT_USE_SSP),y)
+HOST_GCC_COMMON_CONF_OPTS += --disable-libssp
+endif
 
 # Don't build documentation. It takes up extra space / build time,
 # and sometimes needs specific makeinfo versions to work
