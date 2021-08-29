@@ -1,0 +1,29 @@
+From bd33b4c2938ff37b9e9c297081e3a2f996f8af11 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <tobias@t-sys.eu>
+Date: Sun, 29 Aug 2021 15:03:34 +0200
+Subject: [PATCH] ext4: dump cached extents
+
+There is either a compiler bug or cache issue at play on the AVR32.
+Dumping the extent seems to stop it from crashing for some reason.
+Further investigation required.
+
+Signed-off-by: Tobias Schramm <tobias@t-sys.eu>
+---
+ fs/ext4/extents.c |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/fs/ext4/extents.c b/fs/ext4/extents.c
+index 9633683..2bc5e21 100644
+--- a/fs/ext4/extents.c
++++ b/fs/ext4/extents.c
+@@ -513,6 +513,7 @@ static void ext4_cache_extents(struct inode *inode,
+ 	int i;
+ 
+ 	for (i = le16_to_cpu(eh->eh_entries); i > 0; i--, ex++) {
++		pr_info("%s: extent: %px, count: %d\n", __func__, ex, i);
+ 		unsigned int status = EXTENT_STATUS_WRITTEN;
+ 		ext4_lblk_t lblk = le32_to_cpu(ex->ee_block);
+ 		int len = ext4_ext_get_actual_len(ex);
+-- 
+1.7.10.4
+

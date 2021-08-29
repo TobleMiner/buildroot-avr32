@@ -1,0 +1,36 @@
+From 585c2a6ff52503deed74df86d343f59d70ff2f28 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <tobias@t-sys.eu>
+Date: Sun, 29 Aug 2021 14:19:14 +0200
+Subject: [PATCH] Revert "futex: futex_wake_op, do not fail on invalid op"
+
+This reverts commit 71b595cd27c63dbc39665ec1332125547543a3db.
+---
+ kernel/futex.c |   12 ++----------
+ 1 file changed, 2 insertions(+), 10 deletions(-)
+
+diff --git a/kernel/futex.c b/kernel/futex.c
+index e50b676..a322303 100644
+--- a/kernel/futex.c
++++ b/kernel/futex.c
+@@ -1479,16 +1479,8 @@ static int futex_atomic_op_inuser(unsigned int encoded_op, u32 __user *uaddr)
+ 	int oldval, ret;
+ 
+ 	if (encoded_op & (FUTEX_OP_OPARG_SHIFT << 28)) {
+-		if (oparg < 0 || oparg > 31) {
+-			char comm[sizeof(current->comm)];
+-			/*
+-			 * kill this print and return -EINVAL when userspace
+-			 * is sane again
+-			 */
+-			pr_info_ratelimited("futex_wake_op: %s tries to shift op by %d; fix this program\n",
+-					get_task_comm(comm, current), oparg);
+-			oparg &= 31;
+-		}
++		if (oparg < 0 || oparg > 31)
++			return -EINVAL;
+ 		oparg = 1 << oparg;
+ 	}
+ 
+-- 
+1.7.10.4
+
