@@ -1,0 +1,28 @@
+From f54f4c6cbc72ebc50925f6aafe76d18b8078387c Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <tobias@t-sys.eu>
+Date: Wed, 25 Aug 2021 10:35:10 +0200
+Subject: [PATCH] env: fw_env: add missing includes
+
+---
+ tools/env/fw_env.c |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/tools/env/fw_env.c b/tools/env/fw_env.c
+index 30d5b03..243ed1d 100644
+--- a/tools/env/fw_env.c
++++ b/tools/env/fw_env.c
+@@ -12,9 +12,11 @@
+ #include <env_flags.h>
+ #include <fcntl.h>
+ #include <linux/stringify.h>
++#include <linux/types.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+ #include <stddef.h>
++#include <stdint.h>
+ #include <string.h>
+ #include <sys/types.h>
+ #include <sys/ioctl.h>
+-- 
+1.7.10.4
+
