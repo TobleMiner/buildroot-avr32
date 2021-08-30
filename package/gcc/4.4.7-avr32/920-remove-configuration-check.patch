@@ -1,0 +1,11 @@
+--- libgcc/Makefile.in	2009-04-10 01:23:07.000000000 +0200
++++ libgcc/Makefile.in	2021-08-29 18:39:57.592864669 +0200
+@@ -846,7 +846,7 @@
+ 	@echo "Configuration mismatch!"
+ 	@echo "Extra parts from gcc directory: $(GCC_EXTRA_PARTS)"
+ 	@echo "Extra parts from libgcc: $(EXTRA_PARTS)"
+-	exit 1
++#	exit 1
+ endif
+ endif
+ 

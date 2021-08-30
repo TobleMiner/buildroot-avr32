@@ -15,6 +15,10 @@ ifeq ($(findstring 4.4.3-avr32,$(GCC_VERSION)),4.4.3-avr32)
 GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-4.4.3
 GCC_SOURCE = gcc-4.4.3.tar.bz2
 PATCH_PREFIX_DEPTH=0
+else ifeq ($(findstring 4.4.7-avr32,$(GCC_VERSION)),4.4.7-avr32)
+GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-4.4.7
+GCC_SOURCE = gcc-4.4.7.tar.bz2
+PATCH_PREFIX_DEPTH=0
 else ifeq ($(findstring 4.2.2-avr32,$(GCC_VERSION)),4.2.2-avr32)
 GCC_SITE = ftp://www.at91.com/pub/buildroot
 else ifeq ($(BR2_arc),y)
