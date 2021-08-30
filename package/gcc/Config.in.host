@@ -21,6 +21,11 @@ choice
 		# Only supported architecture
 		depends on BR2_avr32
 
+	config BR2_GCC_VERSION_4_4_3_AVR32
+		bool "gcc 4.4.3-avr32"
+		# Only supported architecture
+		depends on BR2_avr32
+
 	config BR2_GCC_VERSION_4_5_X
 		bool "gcc 4.5.x"
 		# Broken or unsupported architectures
@@ -92,6 +97,7 @@ config BR2_GCC_SUPPORTS_FINEGRAINEDMTUNE
 
 config BR2_GCC_VERSION
 	string
+	default "4.4.3-avr32" if BR2_GCC_VERSION_4_4_3_AVR32
 	default "4.2.2-avr32-2.1.5" if BR2_GCC_VERSION_4_2_2_AVR32_2_1_5
 	default "4.5.4"     if BR2_GCC_VERSION_4_5_X
 	default "4.7.4"     if BR2_GCC_VERSION_4_7_X
@@ -110,7 +116,7 @@ config BR2_EXTRA_GCC_CONFIG_OPTIONS
 config BR2_TOOLCHAIN_BUILDROOT_CXX
 	bool "Enable C++ support"
 	select BR2_INSTALL_LIBSTDCPP
-	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 && \
+	depends on !(BR2_GCC_VERSION_4_2_2_AVR32_2_1_5 &&  \
 		     BR2_TOOLCHAIN_BUILDROOT_LOCALE)
 	help
 	  Enable this option if you want your toolchain to support the

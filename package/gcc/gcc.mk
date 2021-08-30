@@ -10,7 +10,12 @@
 
 GCC_VERSION = $(call qstrip,$(BR2_GCC_VERSION))
 
-ifeq ($(findstring avr32,$(GCC_VERSION)),avr32)
+PATCH_PREFIX_DEPTH=1
+ifeq ($(findstring 4.4.3-avr32,$(GCC_VERSION)),4.4.3-avr32)
+GCC_SITE = $(BR2_GNU_MIRROR:/=)/gcc/gcc-4.4.3
+GCC_SOURCE = gcc-4.4.3.tar.bz2
+PATCH_PREFIX_DEPTH=0
+else ifeq ($(findstring 4.2.2-avr32,$(GCC_VERSION)),4.2.2-avr32)
 GCC_SITE = ftp://www.at91.com/pub/buildroot
 else ifeq ($(BR2_arc),y)
 GCC_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,gcc,$(GCC_VERSION))
@@ -44,7 +49,7 @@ endif
 
 define HOST_GCC_APPLY_PATCHES
 	if test -d package/gcc/$(GCC_VERSION); then \
-	  $(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
+	  PREFIX_DEPTH=$(PATCH_PREFIX_DEPTH) $(APPLY_PATCHES) $(@D) package/gcc/$(GCC_VERSION) \*.patch ; \
 	fi;
 	$(HOST_GCC_APPLY_POWERPC_PATCH)
 endef
@@ -58,13 +63,14 @@ define HOST_GCC_EXTRACT_CMDS
 		$(TAR) $(TAR_STRIP_COMPONENTS)=1 -C $(@D) \
 		--exclude='libjava/*' \
 		--exclude='libgo/*' \
-		--exclude='gcc/testsuite/*' \
 		--exclude='libstdc++-v3/testsuite/*' \
 		$(TAR_OPTIONS) -
 	mkdir -p $(@D)/libstdc++-v3/testsuite/
 	echo "all:" > $(@D)/libstdc++-v3/testsuite/Makefile.in
 	echo "install:" >> $(@D)/libstdc++-v3/testsuite/Makefile.in
 endef
+
+#		--exclude='gcc/testsuite/*' \
 
 #
 # Create 'build' directory and configure symlink
