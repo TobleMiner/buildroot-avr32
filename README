@@ -1,3 +1,5 @@
+BROKEN! DO NOT USE!
+
 To build and use the buildroot stuff, do the following:
 
 1) run 'make menuconfig'
