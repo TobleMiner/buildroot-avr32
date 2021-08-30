@@ -1,0 +1,24 @@
+From 4e2c3d5ba6192cacbebc99ee797254e9e284a186 Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <tobias@t-sys.eu>
+Date: Mon, 30 Aug 2021 11:50:28 +0200
+Subject: [PATCH 2/3] opcodes: add avr32 target
+
+---
+ opcodes/configure |    1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/opcodes/configure b/opcodes/configure
+index 746070e..489d644 100755
+--- a/opcodes/configure
++++ b/opcodes/configure
+@@ -12409,6 +12409,7 @@ if test x${all_targets} = xfalse ; then
+ 	bfd_arc_arch)		ta="$ta arc-dis.lo arc-opc.lo arc-ext.lo" ;;
+ 	bfd_arm_arch)		ta="$ta arm-dis.lo" ;;
+ 	bfd_avr_arch)		ta="$ta avr-dis.lo" ;;
++	bfd_avr32_arch)		ta="$ta avr32-asm.lo avr32-dis.lo avr32-opc.lo" ;;
+ 	bfd_bfin_arch)		ta="$ta bfin-dis.lo" ;;
+ 	bfd_cr16_arch)    	ta="$ta cr16-dis.lo cr16-opc.lo" ;;
+ 	bfd_cris_arch)		ta="$ta cris-dis.lo cris-opc.lo cgen-bitset.lo" ;;
+-- 
+1.7.10.4
+

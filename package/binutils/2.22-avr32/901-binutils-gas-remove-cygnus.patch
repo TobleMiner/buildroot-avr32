@@ -1,0 +1,10 @@
+--- a/gas/doc/Makefile.am	2021-08-30 02:03:04.580872160 +0200
++++ a/gas/doc/Makefile.am	2021-08-30 02:02:58.028862804 +0200
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to generate Makefile.in
+ 
+-AUTOMAKE_OPTIONS = 1.8 cygnus
++AUTOMAKE_OPTIONS = 1.8
+ 
+ # What version of the manual you want; "all" includes everything
+ CONFIG=all

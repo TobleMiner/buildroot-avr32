@@ -1,0 +1,10 @@
+--- a/bfd/doc/Makefile.am	2021-08-30 02:03:37.748864206 +0200
++++ b/bfd/doc/Makefile.am	2021-08-30 02:03:29.820866368 +0200
+@@ -1,6 +1,6 @@
+ ## Process this file with automake to generate Makefile.in
+ 
+-AUTOMAKE_OPTIONS = 1.9 cygnus
++AUTOMAKE_OPTIONS = 1.9
+ 
+ DOCFILES = aoutx.texi  archive.texi archures.texi \
+ 	bfdt.texi  cache.texi coffcode.texi \

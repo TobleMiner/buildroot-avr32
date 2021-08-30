@@ -1,0 +1,32 @@
+From e11588fb3e88495a30b8fe7c0e7cc78efb249b6d Mon Sep 17 00:00:00 2001
+From: Tobias Schramm <tobias@t-sys.eu>
+Date: Mon, 30 Aug 2021 12:03:29 +0200
+Subject: [PATCH 4/6] bfd: add avr32 targets to Makefile.in
+
+---
+ bfd/Makefile.in |    2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/bfd/Makefile.in b/bfd/Makefile.in
+index 741809c..5bfb231 100644
+--- a/bfd/Makefile.in
++++ b/bfd/Makefile.in
+@@ -374,6 +374,7 @@ ALL_MACHINES = \
+ 	cpu-arc.lo \
+ 	cpu-arm.lo \
+ 	cpu-avr.lo \
++	cpu-avr32.lo \
+ 	cpu-bfin.lo \
+ 	cpu-cr16.lo \
+ 	cpu-cr16c.lo \
+@@ -578,6 +579,7 @@ BFD32_BACKENDS = \
+ 	elf32-arc.lo \
+ 	elf32-arm.lo \
+ 	elf32-avr.lo \
++	elf32-avr32.lo \
+ 	elf32-bfin.lo \
+ 	elf32-cr16.lo \
+ 	elf32-cr16c.lo \
+-- 
+1.7.10.4
+

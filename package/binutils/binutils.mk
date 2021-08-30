@@ -16,8 +16,40 @@ BINUTILS_VERSION = 2.22
 endif
 endif
 
-ifeq ($(ARCH),avr32)
+ifeq ($(BINUTILS_VERSION),2.18-avr32-1.0.1)
 BINUTILS_SITE = ftp://www.at91.com/pub/buildroot
+endif
+ifeq ($(BINUTILS_VERSION),2.22-avr32)
+BINUTILS_SOURCE = binutils-2.22.tar.bz2
+BINUTILS_AUTORECONF = YES
+define BINUTILS_AVR32_PRE_CONFIGURE
+	# Reconfigure binutils
+	$(Q)cd $($(PKG)_SRCDIR); $(ACLOCAL); $(AUTOCONF); $(AUTOMAKE); $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+	$(Q)cd $($(PKG)_SRCDIR)/binutils; $(ACLOCAL); $(AUTOCONF); $(AUTOMAKE) --add-missing; $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+	# Reconfigure ld
+	$(Q)cd $($(PKG)_SRCDIR)/ld; $(ACLOCAL); $(AUTOCONF); $(AUTOMAKE); $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+	# Reconfigure opcodes
+	$(Q)cd $($(PKG)_SRCDIR)/opcodes; $(ACLOCAL); $(AUTOCONF); $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+	# Reconfigure gas, needs automake documentation fixup
+	$(Q)cd $($(PKG)_SRCDIR)/gas; $(ACLOCAL); $(AUTOCONF); $(AUTOMAKE) --add-missing; $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+	# Reconfigure bfd, needs automake documentation fixup
+	$(Q)cd $($(PKG)_SRCDIR)/bfd; $(ACLOCAL); $(AUTOCONF); $(AUTOMAKE) --add-missing; $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+	# Reconfigure gprof
+	$(Q)cd $($(PKG)_SRCDIR)/gprof; $(ACLOCAL); $(AUTOCONF); $(AUTOMAKE); $($(PKG)_AUTORECONF_ENV) $(AUTORECONF) $($(PKG)_AUTORECONF_OPTS)
+endef
+#HOST_BINUTILS_POST_PATCH_HOOKS += BINUTILS_AVR32_PRE_CONFIGURE
+define BINUTILS_AVR32_POST_CONFIGURE
+	$(HOST_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_MAKE_OPTS) -C $($(PKG)_SRCDIR) configure-host && \
+	$(RM) -f $($(PKG)_SRCDIR)/bfd/bfd.h $($(PKG)_SRCDIR)/bfd/doc/bfd.h && \
+	$(HOST_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_MAKE_OPTS) -C $($(PKG)_SRCDIR)/bfd headers && \
+	$(HOST_MAKE_ENV) $($(PKG)_MAKE_ENV) $($(PKG)_MAKE) $($(PKG)_MAKE_OPTS) -C $($(PKG)_SRCDIR)/bfd bfd.h
+endef
+#HOST_BINUTILS_POST_CONFIGURE_HOOKS += BINUTILS_AVR32_POST_CONFIGURE
+define BINUTILS_AVR32_PRE_BUILD
+	# Remove stale bfd-in2.h
+#	$(RM) -f $($(PKG)_SRCDIR)/bfd/bfd-in2.h
+endef
+#HOST_BINUTILS_PRE_BUILD_HOOKS += BINUTILS_AVR32_PRE_BUILD
 endif
 ifeq ($(BR2_arc),y)
 BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
@@ -52,6 +84,7 @@ BINUTILS_CONF_OPTS = \
 	--host=$(GNU_TARGET_NAME) \
 	--target=$(GNU_TARGET_NAME) \
 	--enable-install-libiberty \
+	--srcdir=$($(PKG)_SRCDIR) \
 	$(BINUTILS_DISABLE_GDB_CONF_OPTS) \
 	$(BINUTILS_EXTRA_CONFIG_OPTIONS)
 
