@@ -1,0 +1,11 @@
+--- u-boot/arch/avr32/cpu/start.S	2021-08-30 13:05:25.312862586 +0200
++++ u-boot/arch/avr32/cpu/start.S	2021-08-30 12:55:08.504864015 +0200
+@@ -176,7 +176,7 @@
+ 
+ 	.align	2
+ 1:	.long	at32ap_low_level_init
+-	.size	_start, . - _start
++//	.size	_start, . - _start
+ 
+ 	/* Common CPU bootstrap code after oscillator/cache/etc. init */
+ 	.section .text.avr32ap_low_level_init, "ax", @progbits
