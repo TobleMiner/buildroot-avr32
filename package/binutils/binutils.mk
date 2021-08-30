@@ -51,6 +51,10 @@ define BINUTILS_AVR32_PRE_BUILD
 endef
 #HOST_BINUTILS_PRE_BUILD_HOOKS += BINUTILS_AVR32_PRE_BUILD
 endif
+ifeq ($(BINUTILS_VERSION),2.20.1-avr32)
+BINUTILS_SOURCE = binutils-2.20.1.tar.bz2
+BINUTILS_AUTORECONF = YES
+endif
 ifeq ($(BR2_arc),y)
 BINUTILS_SITE = $(call github,foss-for-synopsys-dwc-arc-processors,binutils-gdb,$(BINUTILS_VERSION))
 BINUTILS_SOURCE = binutils-$(BINUTILS_VERSION).tar.gz
