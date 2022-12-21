@@ -1,0 +1,50 @@
+diff --git a/gcc/config/avr32/avr32.c b/gcc/config/avr32/avr32.c
+index 6736d5c..2012e7a 100644
+--- a/gcc/config/avr32/avr32.c
++++ b/gcc/config/avr32/avr32.c
+@@ -3872,7 +3872,7 @@ avr32_return_in_memory (tree type, tree fntype ATTRIBUTE_UNUSED)
+ void
+ avr32_trampoline_template (FILE * file)
+ {
+-  fprintf (file, "\tlddpc    r0, pc[8]\n");
++  fprintf (file, "\tlddpc    r0, pc[4]\n");
+   fprintf (file, "\tlddpc    pc, pc[8]\n");
+   /* make room for the address of the static chain. */
+   fprintf (file, "\t.long\t0\n");
+@@ -3889,14 +3889,14 @@ avr32_initialize_trampoline (rtx addr, rtx fnaddr, rtx static_chain)
+ {
+   /* Store the address to the static chain. */
+   emit_move_insn (gen_rtx_MEM
+-		  (SImode, plus_constant (addr, TRAMPOLINE_SIZE - 4)),
++		  (SImode, plus_constant (addr, TRAMPOLINE_SIZE - 8)),
+ 		  static_chain);
+ 
+   /* Store the address to the function. */
+-  emit_move_insn (gen_rtx_MEM (SImode, plus_constant (addr, TRAMPOLINE_SIZE)),
++  emit_move_insn (gen_rtx_MEM (SImode, plus_constant (addr, TRAMPOLINE_SIZE - 4)),
+ 		  fnaddr);
+ 
+-  emit_insn (gen_cache (gen_rtx_REG (SImode, 13),
++  emit_insn (gen_cache (gen_rtx_REG (SImode, INTERNAL_REGNUM(13)),
+ 			gen_rtx_CONST_INT (SImode,
+ 					   AVR32_CACHE_INVALIDATE_ICACHE)));
+ }
+diff --git a/gcc/config/avr32/avr32.h b/gcc/config/avr32/avr32.h
+index 328e530..44afd4f 100644
+--- a/gcc/config/avr32/avr32.h
++++ b/gcc/config/avr32/avr32.h
+@@ -2095,14 +2095,12 @@ for the target.  Do not define this macro on systems where the block move
+ code to copy the trampoline into place would be larger than the code
+ to generate it on the spot.
+ */
+-/* ToDo: correct? */
+ #define TRAMPOLINE_TEMPLATE(FILE) avr32_trampoline_template(FILE);
+ 
+ 
+ /*
+ A C expression for the size in bytes of the trampoline, as an integer.
+ */
+-/* ToDo: fixme */
+ #define TRAMPOLINE_SIZE 0x0C
+ 
+ /*
