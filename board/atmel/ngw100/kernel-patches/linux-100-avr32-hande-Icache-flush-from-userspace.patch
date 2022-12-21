@@ -1,0 +1,34 @@
+diff --git a/arch/avr32/kernel/traps.c b/arch/avr32/kernel/traps.c
+index 682b247..04207e0 100644
+--- a/arch/avr32/kernel/traps.c
++++ b/arch/avr32/kernel/traps.c
+@@ -254,8 +254,28 @@ asmlinkage void do_fpe(unsigned long ecr, struct pt_regs *regs)
+ 	_exception(SIGILL, regs, ILL_COPROC, regs->pc);
+ }
+ 
++static int cache_control_hook_fn(struct pt_regs *regs, u32 insn) {
++	asm volatile ("cache %0, 1" :: "r" (regs->sp));
++	regs->pc += 4;
++	printk(KERN_INFO "Invalidated instruction cache\n");
++	return 0;
++}
++
++/*
++ * I think there is a nasty bug in GCC, incorrectly using R2 instead of
++ * R13 (alias of SP) as address source for the cache flush.
++ * Do not match that part for now and just pretend it should be R13
++ */
++
++struct undef_hook cache_control_hook = {
++	.node = LIST_HEAD_INIT(cache_control_hook.node),
++	.insn_mask = 0xfff0ffff,
++	.insn_val  = 0xf4100800,
++	.fn = cache_control_hook_fn
++};
+ 
+ void __init trap_init(void)
+ {
+-
++	register_undef_hook(&cache_control_hook);
++	printk(KERN_INFO "Undefined instruction hook for AVR32 cache control instruction registered\n");
+ }
